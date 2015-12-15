@@ -12,28 +12,15 @@ for th=0:1:179
     x(th+1)=n;
 end
 y=abs(fft(x,180));                    % all DFT coefficients
-% z=[];
-% for i=1:91                            % first 15 DFT coefficients
-%     z(i)=y(i);
-% end
-% s=sumsqr(z);
-% w=[];
-% for j=1:15
-%     w(j)=(z(j)*z(j))/s;
-% end
-% sum(w);
 z=[];
 for i=1:15                            % first 15 DFT coefficients
     z(i)=y(i);
 end
 z=z/max(z);                            % normalization;
 levels=linspace(0,1,1023);
-quantizeddata = discretize(z, levels);
+quantizeddata = discretize(z, levels); % discretized to 1024 level
 % bin = dec2bin(quantizeddata, 10);
-% bin = bin - '0';
-% quant = max(z)/(2^10-1);
-% z=round(z/quant);
-%z= [dec2bin(z,10)];
+
 
 
 %display(z);
