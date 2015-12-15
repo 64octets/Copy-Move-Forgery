@@ -4,3 +4,6 @@ The algorithm takes an input image and gives the areas which have been copied fo
 #Usage
 ... copymove(image,b)
 where b= block size used for block matching
+%
+code those have a few bugs
+need fixing
