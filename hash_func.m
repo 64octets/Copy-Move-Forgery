@@ -21,10 +21,5 @@ levels=linspace(0,1,1023);
 quantizeddata = discretize(z, levels); % discretized to 1024 level
 % bin = dec2bin(quantizeddata, 10);
 
-
-
-%display(z);
-
-
 end
 
