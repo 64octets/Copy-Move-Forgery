@@ -5,7 +5,7 @@ function [feature] = copymove( im,b )
 if d>1
     im=rgb2gray(im);
 end
-feature=[];
+feature=zeros(m-b+1*n-b+1,17);
 index_x=1;
 for i=1:1:m-b+1
     for j=1:1:n-b+1
@@ -19,22 +19,33 @@ for i=1:1:m-b+1
         index_x=index_x+1;
     end
 end
-feature=sortrows(feature);
+feature=sortrows(feature,1:15);
+feature=feature(:,1:15);
+loc=feature(:,16:17);
 [numberOfRows,numberOfColumns]=size(feature);
-matchingBlocks=1;
-previousShift=0;
+shift_vector=(numberOfRows,2);
+match1=(numberOfRows,2);
+match2=(numberOfRows,2);
+num_match_index=1;
 for current=1:1:numberOfRows-1                                              % no of comparisons
     next=current+1;
-    d=sum(abs(feature(current,1:15)-feature(next,1:15)))/1023;              % distance for matching blocks
-    if d<.05
-        shift=sqrt(sum((feature(current,16:17)-feature(next,16:17)).^2));   % if blocks are matching
-        if abs(previousShift-shift)<1
-            matchingBlocks=matchingBlocks+1;
+    d=sum(abs(feature(current)-feature(next)))/1023;              % distance for matching blocks
+    if d<.05                                                      % for matching blocks extract the coordinates
+        x1y1=loc(current,:);
+        x2y2=loc(next,:);
+        shift_vector(num_match_index,:) = [abs(x1y1(1) - x2y2(1)), abs(x1y1(2) - x2y2(2))]; % compute the shift vector
+        if ~isequal(shift_vector(num_match_index,:), [0,1]) && ...
+                ~isequal(shift_vector(num_match_index,:), [1,0]) && ...
+                ~isequal(shift_vector(num_match_index,:), [1,1])
+            match1(num_match_index,:)=x1y1;
+            match2(num_match_index,:)=x2y2;
+            num_match_index=num_match_index+1;
         end
-        previousShift=shift;
     end
 end
-if matchingBlocks>8
+match1 = match1(1:num_match_index, :);                              %downsizing
+match2 = match2(1:num_match_index, :);
+shift_vector = shift_vector(1:num_match_index, :);
     
 end
 
